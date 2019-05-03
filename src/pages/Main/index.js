@@ -17,12 +17,16 @@ export default class Main extends Component {
   async componentDidMount() {
     this.setState({ loading: true });
 
-    this.setState({ loading: false, repositories: await this.getLocalRepositories() });
+    this.setState({
+      loading: false,
+      repositories: await this.getLocalRepositories()
+    });
   }
 
-  getLocalRepositories = async () => JSON.parse(await localStorage.getItem('@GitCompare:repositories')) || [];
+  getLocalRepositories = async () =>
+    JSON.parse(await localStorage.getItem("@GitCompare:repositories")) || [];
 
-  handleAddRepository = async (e) => {
+  handleAddRepository = async e => {
     e.preventDefault();
 
     this.setState({ loading: true });
@@ -36,15 +40,15 @@ export default class Main extends Component {
 
       this.setState({
         repositoryError: false,
-        repositoryInput: '',
-        repositories: [...repositories, repository],
+        repositoryInput: "",
+        repositories: [...repositories, repository]
       });
 
       const localRepositories = await this.getLocalRepositories();
 
       await localStorage.setItem(
-        '@GitCompare:repositories',
-        JSON.stringify([...localRepositories, repository]),
+        "@GitCompare:repositories",
+        JSON.stringify([...localRepositories, repository])
       );
     } catch (err) {
       this.setState({ repositoryError: true });
@@ -53,19 +57,25 @@ export default class Main extends Component {
     }
   };
 
-  getLocalRepositories = async () => JSON.parse(await localStorage.getItem('@GitCompare:repositories')) || [];
+  getLocalRepositories = async () =>
+    JSON.parse(await localStorage.getItem("@GitCompare:repositories")) || [];
 
-  handleRemoveRepository = async (id) => {
+  handleRemoveRepository = async id => {
     const { repositories } = this.state;
 
-    const updatedRepositories = repositories.filter(repository => repository.id !== id);
+    const updatedRepositories = repositories.filter(
+      repository => repository.id !== id
+    );
 
     this.setState({ repositories: updatedRepositories });
 
-    await localStorage.setItem('@GitCompare:repositories', JSON.stringify(updatedRepositories));
+    await localStorage.setItem(
+      "@GitCompare:repositories",
+      JSON.stringify(updatedRepositories)
+    );
   };
 
-  handleUpdateRepository = async (id) => {
+  handleUpdateRepository = async id => {
     const { repositories } = this.state;
 
     const repository = repositories.find(repo => repo.id === id);
@@ -77,11 +87,16 @@ export default class Main extends Component {
 
       this.setState({
         repositoryError: false,
-        repositoryInput: '',
-        repositories: repositories.map(repo => (repo.id === data.id ? data : repo)),
+        repositoryInput: "",
+        repositories: repositories.map(repo =>
+          repo.id === data.id ? data : repo
+        )
       });
 
-      await localStorage.setItem('@GitCompare:repositories', JSON.stringify(repositories));
+      await localStorage.setItem(
+        "@GitCompare:repositories",
+        JSON.stringify(repositories)
+      );
     } catch (err) {
       this.setState({ repositoryError: true });
     }
@@ -110,8 +125,11 @@ export default class Main extends Component {
             )}
           </button>
         </Form>
-        <CompareList repositories={this.state.repositories} removeRepository={this.handleRemoveRepository}
-                     updateRepository={this.handleUpdateRepository} />
+        <CompareList
+          repositories={this.state.repositories}
+          removeRepository={this.handleRemoveRepository}
+          updateRepository={this.handleUpdateRepository}
+        />
       </Container>
     );
   }
